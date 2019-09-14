@@ -1,0 +1,80 @@
+---
+title: "p8105_hw1_qz2392"
+author: "Qimin Zhang"
+date: "9/13/2019"
+output: github_document
+---
+
+# Problem 1
+First to include the library "tidyverse".
+```{r,message=FALSE}
+library(tidyverse)
+```
+Then to create the required dataframe.
+```{r}
+df_1= tibble(
+  vec_numeric = rnorm(8),
+  vec_logical = vec_numeric > 10,
+  vec_char = c("This", "is", "Qimin", "Zhang","welcome","to","my","rmarkdown"),
+  vec_factor = factor(c("small", "small", "small","medium", "medium","medium","large","large"))
+)
+```
+Take the mean of each variable.
+```{r,results='hide'}
+mean(pull(df_1, vec_numeric))
+mean(pull(df_1, vec_logical))
+mean(pull(df_1, vec_char))
+mean(pull(df_1, vec_factor))
+```
+According to the output, we can take means of numerical variables and logic variables, but we can't do so to character variables and factor variables.
+
+Try to convert variables to numeric:
+```{r,results='hide',warning=FALSE}
+as.numeric(pull(df_1, vec_logical))
+as.numeric(pull(df_1, vec_char))
+as.numeric(pull(df_1, vec_factor))
+```
+Logical variables and factor variables can be converted to numerical, but character variables can't be. It explains why we can take mean of logical variables, but can't explain why we can't do so to factor variables.
+
+The following is to convert logical variables to different types, then multiply the results by random samples.
+```{r}
+as.numeric(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
+as.factor(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
+as.numeric(as.factor(pull(df_1, vec_logical)))*pull(df_1, vec_numeric)
+```
+# Problem 2
+First to create the required dataframe.
+```{r}
+df_2= tibble(
+  x = rnorm(500),
+  y = rnorm(500),
+  vec_logical = x+y>1,
+  vec_numeric = as.numeric(vec_logical),
+  vec_factor = as.factor(vec_logical)
+)
+```
+Get some descriptive statistics of the variables above.
+```{r}
+#Number of columns of the dataframe
+ncol(df_2)
+#Number of rows of the dataframe
+nrow(df_2)
+#Mean of x in dataframe
+mean(pull(df_2, x))
+#Median of x in dataframe
+median(pull(df_2, x))
+#Standard deviation of x in dataframe
+sd(pull(df_2, x))
+#Proportion of the vec_logicals which are true
+prop.table(table(pull(df_2, vec_logical)))
+```
+Include the library "ggplot2".
+```{r,results='hide'}
+library(ggplot2)
+```
+Make a scatterplot of y vs x:
+```{r}
+ggplot(df_2, aes(x = x, y = y, color = vec_logical)) + geom_point()
+ggplot(df_2, aes(x = x, y = y, color = vec_numeric)) + geom_point()
+ggplot(df_2, aes(x = x, y = y, color = vec_factor)) + geom_point()
+```
