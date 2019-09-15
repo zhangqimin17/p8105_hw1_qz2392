@@ -20,13 +20,13 @@ df_1= tibble(
 )
 ```
 Take the mean of each variable.
-```{r,results='hide'}
+```{r}
 mean(pull(df_1, vec_numeric))
 mean(pull(df_1, vec_logical))
 mean(pull(df_1, vec_char))
 mean(pull(df_1, vec_factor))
 ```
-According to the output, we can take means of numerical variables and logic variables, but we can't do so to character variables and factor variables.
+According to the output, we can take means of numerical variables and logical variables, but we can't do so to character variables and factor variables.
 
 Try to convert variables to numeric:
 ```{r,results='hide',warning=FALSE}
@@ -42,6 +42,7 @@ as.numeric(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
 as.factor(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
 as.numeric(as.factor(pull(df_1, vec_logical)))*pull(df_1, vec_numeric)
 ```
+It doesn't work when converting logical variables to factor ones.
 # Problem 2
 First to create the required dataframe.
 ```{r}
@@ -54,27 +55,19 @@ df_2= tibble(
 )
 ```
 Get some descriptive statistics of the variables above.
-```{r}
-#Number of columns of the dataframe
-ncol(df_2)
-#Number of rows of the dataframe
-nrow(df_2)
-#Mean of x in dataframe
-mean(pull(df_2, x))
-#Median of x in dataframe
-median(pull(df_2, x))
-#Standard deviation of x in dataframe
-sd(pull(df_2, x))
-#Proportion of the vec_logicals which are true
-prop.table(table(pull(df_2, vec_logical)))
-```
-Include the library "ggplot2".
-```{r,results='hide'}
-library(ggplot2)
-```
-Make a scatterplot of y vs x:
-```{r}
+Number of columns of the dataframe is `r ncol(df_2)`, while number of rows of the dataframe is `r nrow(df_2)`.
+Mean of x in dataframe is `r mean(pull(df_2, x))`.
+Median of x in dataframe is `r median(pull(df_2, x))`.
+Standard deviation of x in dataframe is `r sd(pull(df_2, x))`.
+Proportions of the vec_logicals which are True are `r mean(pull(df_2, vec_logical))`.
+
+Make scatterplots of y vs x with different color scale and save them:
+```{r, message=FALSE}
 ggplot(df_2, aes(x = x, y = y, color = vec_logical)) + geom_point()
+ggsave("scatterplot with logical scale.png")
 ggplot(df_2, aes(x = x, y = y, color = vec_numeric)) + geom_point()
+ggsave("scatterplot with numeric scale.png")
 ggplot(df_2, aes(x = x, y = y, color = vec_factor)) + geom_point()
+ggsave("scatterplot with factor scale.png")
 ```
+When using color to seperate the scatter points, the color scale is binary with logical and factor variables, while it's continuous with numeric variables.
