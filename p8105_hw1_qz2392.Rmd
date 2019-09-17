@@ -20,7 +20,7 @@ df_1= tibble(
 )
 ```
 Take the mean of each variable.
-```{r}
+```{r, collapse=TRUE}
 mean(pull(df_1, vec_numeric))
 mean(pull(df_1, vec_logical))
 mean(pull(df_1, vec_char))
@@ -37,7 +37,7 @@ as.numeric(pull(df_1, vec_factor))
 Logical variables and factor variables can be converted to numerical, but character variables can't be. It explains why we can take mean of logical variables, but can't explain why we can't do so to factor variables.
 
 The following is to convert logical variables to different types, then multiply the results by random samples.
-```{r}
+```{r, collapse=TRUE}
 as.numeric(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
 as.factor(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
 as.numeric(as.factor(pull(df_1, vec_logical)))*pull(df_1, vec_numeric)
