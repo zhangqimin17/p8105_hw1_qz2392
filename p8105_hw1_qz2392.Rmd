@@ -34,7 +34,7 @@ as.numeric(pull(df_1, vec_logical))
 as.numeric(pull(df_1, vec_char))
 as.numeric(pull(df_1, vec_factor))
 ```
-Logical variables and factor variables can be converted to numerical, but character variables can't be. It explains why we can take mean of logical variables, but can't explain why we can't do so to factor variables.
+Logical variables and factor variables can be converted to numerical, but character variables can't be. Because in R, if we do numerical calculation to logical and factor variables, they are automatically turned into numerical form which still represents specific categories, while character variables can't be.  It explains why we can take mean of logical variables, but can't explain why we can't do so to factor variables.
 
 The following is to convert logical variables to different types, then multiply the results by random samples.
 ```{r, collapse=TRUE}
