@@ -15,34 +15,48 @@ Then to create the required dataframe.
 df_1= tibble(
   vec_numeric = rnorm(8),
   vec_logical = vec_numeric > 10,
-  vec_char = c("This", "is", "Qimin", "Zhang","welcome","to","my","rmarkdown"),
-  vec_factor = factor(c("small", "small", "small","medium", "medium","medium","large","large"))
+  vec_char = c("This", "is", 
+               "Qimin", "Zhang",
+               "welcome","to",
+               "my","rmarkdown"),
+  vec_factor = factor(c("small", "small", 
+                        "small","medium", 
+                        "medium","medium",
+                        "large","large"))
 )
 ```
 Take the mean of each variable.
 ```{r, collapse=TRUE}
-mean(pull(df_1, vec_numeric))
-mean(pull(df_1, vec_logical))
-mean(pull(df_1, vec_char))
-mean(pull(df_1, vec_factor))
+df_1 %>% pull(vec_numeric) %>% mean()
+df_1 %>% pull(vec_logical) %>% mean()
+df_1 %>% pull(vec_char) %>% mean()
+df_1 %>% pull(vec_factor) %>% mean()
 ```
 According to the output, we can take means of numerical variables and logical variables, but we can't do so to character variables and factor variables.
 
 Try to convert variables to numeric:
 ```{r,results='hide',warning=FALSE}
-as.numeric(pull(df_1, vec_logical))
-as.numeric(pull(df_1, vec_char))
-as.numeric(pull(df_1, vec_factor))
+df_1 %>% pull(vec_logical) %>% as.numeric()
+df_1 %>% pull(vec_char) %>% as.numeric()
+df_1 %>% pull(vec_factor) %>% as.numeric()
 ```
 Logical variables and factor variables can be converted to numerical, but character variables can't be. Because in R, if we do numerical calculation to logical and factor variables, they are automatically turned into numerical form which still represents specific categories, while character variables can't be.  It explains why we can take mean of logical variables, but can't explain why we can't do so to factor variables.
 
 The following is to convert logical variables to different types, then multiply the results by random samples.
 ```{r, collapse=TRUE}
-as.numeric(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
-as.factor(pull(df_1, vec_logical))*pull(df_1, vec_numeric)
-as.numeric(as.factor(pull(df_1, vec_logical)))*pull(df_1, vec_numeric)
+(df_1 %>% 
+  pull(vec_logical) %>% 
+  as.numeric()) *pull(df_1, vec_numeric)
+(df_1 %>% 
+  pull(vec_logical) %>% 
+  as.factor()) *pull(df_1, vec_numeric)
+(df_1 %>% 
+  pull(vec_logical) %>% 
+  as.factor() %>% 
+  as.numeric()) *pull(df_1, vec_numeric)
 ```
 It doesn't work when converting logical variables to factor ones.
+
 # Problem 2
 First to create the required dataframe.
 ```{r}
@@ -62,11 +76,15 @@ Standard deviation of x in dataframe is `r sd(pull(df_2, x))`.
 Proportions of the vec_logicals which are True are `r mean(pull(df_2, vec_logical))`.
 
 Make scatterplots of y vs x with different color scale and save them:
-```{r, message=FALSE}
+```{r, message=FALSE, collapse=TRUE}
 ggplot(df_2, aes(x = x, y = y, color = vec_logical)) + geom_point()
 ggsave("scatterplot with logical scale.png")
+```
+```{r, message=FALSE, collapse=TRUE}
 ggplot(df_2, aes(x = x, y = y, color = vec_numeric)) + geom_point()
 ggsave("scatterplot with numeric scale.png")
+```
+```{r, message=FALSE, collapse=TRUE}
 ggplot(df_2, aes(x = x, y = y, color = vec_factor)) + geom_point()
 ggsave("scatterplot with factor scale.png")
 ```
